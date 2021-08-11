@@ -9,7 +9,7 @@ GO
 -- =============================================
 -- Author:		Artyom
 -- Create date: 27.05.21
--- Description:	Перевод типа из SQL в .Net
+-- Description:	РџРµСЂРµРІРѕРґ С‚РёРїР° РёР· SQL РІ .Net
 -- =============================================
 ALTER FUNCTION [stn].[UF_GetNetType](
 	@SQLType VARCHAR(50),
@@ -41,7 +41,7 @@ GO
 -- =============================================
 -- Author:		Artyom
 -- Create date: 25.09.20
--- Description:	 Возвращает данные для генерации кода классов и процедур
+-- Description:	 Р’РѕР·РІСЂР°С‰Р°РµС‚ С‚РёРїС‹ СЃС‚РѕР»Р±С†РѕРІ С‚Р°Р±Р»РёС†С‹
 -- =============================================
 ALTER FUNCTION [stn].[UF_GetTColumns](
 	@Table AS VARCHAR(50))
@@ -69,7 +69,7 @@ GO
 -- =============================================
 -- Author:		Artyom
 -- Create date:	26.05.2021
--- Description:	Возвращает типы столбцов табличного типа
+-- Description:	Р’РѕР·РІСЂР°С‰Р°РµС‚ С‚РёРїС‹ СЃС‚РѕР»Р±С†РѕРІ С‚Р°Р±Р»РёС‡РЅРѕРіРѕ С‚РёРїР°
 -- =============================================
 ALTER FUNCTION [stn].[UF_GetTTColumns](
 	@Name AS VARCHAR(50))
@@ -78,7 +78,7 @@ AS
 RETURN
    (
 	   SELECT
-	   [C].[name] AS                              [name]
+	   [C].[name] AS                              [Name]
 	 , [C].[IS_NULLABLE] AS                       [Null]
 	 , [stn].[UF_GetNetType]([T].[name], 'NO') AS [NType]
 	 , [T].[name] AS                              [DBType]
@@ -103,7 +103,7 @@ GO
 -- =============================================
 -- Author:		Artyom
 -- Create date: 21.01.2021
--- Description:	 Возвращает типы входных данных процедуры
+-- Description:	 Р’РѕР·РІСЂР°С‰Р°РµС‚ С‚РёРїС‹ РІС…РѕРґРЅС‹С… РґР°РЅРЅС‹С… РїСЂРѕС†РµРґСѓСЂС‹
 -- =============================================
 ALTER FUNCTION [stn].[UF_GetUPInput](
 	@UP AS VARCHAR(50))
@@ -133,7 +133,7 @@ GO
 -- =============================================
 -- Author:		Artyom
 -- Create date: 19.01.2021
--- Description:	 Возвращает типы выходных данных процедуры
+-- Description:	 Р’РѕР·РІСЂР°С‰Р°РµС‚ С‚РёРїС‹ РІС‹С…РѕРґРЅС‹С… РґР°РЅРЅС‹С… РїСЂРѕС†РµРґСѓСЂС‹
 -- =============================================
 ALTER FUNCTION [stn].[UF_GetUPOutput](
 	@UP AS VARCHAR(50))
@@ -142,7 +142,7 @@ AS
 RETURN
    (
 	   SELECT
-	   [C].[name] AS                                           [name]
+	   [C].[name] AS                                           [Name]
 	 , [C].[IS_NULLABLE] AS                                    [Null]
 	 , [stn].[UF_GetNetType]([T].[name], [T].[IS_NULLABLE]) AS [NType]
 	 , [T].[name] AS                                           [DBType]
