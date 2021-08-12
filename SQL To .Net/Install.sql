@@ -59,7 +59,7 @@ RETURN
 	   FROM
 	   [INFORMATION_SCHEMA].[COLUMNS]
 	   WHERE [TABLE_NAME] = @Table AND
-			 [COLUMN_NAME] NOT IN('CRdate', 'CRuser', 'EDdate', 'EDuser')
+			 [COLUMN_NAME] NOT IN('CRdate', 'CRuser', 'EDdate', 'EDuser', 'DLDate', 'DLUser')
    )
 GO
 
