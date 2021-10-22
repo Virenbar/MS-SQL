@@ -112,12 +112,15 @@ AS
 RETURN
    (
 	   SELECT
-	   --[C].[parameter_id] AS                                       [Order]
-	   [C].[IS_NULLABLE] AS                                                     [Null]
-	 , replace([C].[name], '@', '') AS                                          [Name]
-	 , IIF([T].[name] LIKE '%char', CAST([C].[max_length] AS VARCHAR), NULL) AS [Size]
-	 , [stn].[UF_GetNetType]([T].[name], [T].[IS_NULLABLE]) AS                  [NType]
-	 , [T].[name] AS                                                            [DBType]
+	   [C].[IS_NULLABLE] AS                                    [Null]
+	 , replace([C].[name], '@', '') AS                         [Name]
+	 , CASE
+		   WHEN [T].[name] LIKE 'n%char' THEN CAST([C].[max_length] / 2 AS VARCHAR)
+		   WHEN [T].[name] LIKE '%char' THEN CAST([C].[max_length] AS VARCHAR)
+									   ELSE NULL
+	   END AS                                                  [Size]
+	 , [stn].[UF_GetNetType]([T].[name], [T].[IS_NULLABLE]) AS [NType]
+	 , [T].[name] AS                                           [DBType]
 	   FROM
 	   [sys].[parameters] AS [C]
 	   JOIN [sys].[procedures] AS [p] ON [C].object_id = [p].object_id
