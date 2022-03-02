@@ -20,7 +20,7 @@ FROM [stn].[UF_GetTColumns]('Table')
 -- #CS Class code
 -- ##From Procedure
 -- Data Property
-SELECT 'public ' + [NType] + ' '+ [Name]
+SELECT 'public ' + [NType] + ' '+ [Name] +' {get; set;}'
 FROM [stn].[UF_GetUPOutput]('Procedure')
 -- Class Property
 SELECT 'public '+NType +' '+[Name]+'{
@@ -36,8 +36,8 @@ FROM [stn].[UF_GetUPOutput]('Procedure')
 SELECT [Name] + ' = R.Field<' + [NType]+'>("'+[Name]+'")'
 FROM [stn].[UF_GetUPOutput]('Procedure')
 -- Data to Parameter
-SELECT 'P.Add(New SqlParameter("@' + [Name] + '", SqlDbType.' + [DBType] + IIF([size] IS NULL, '', ', ' + [Size]) + ') {Value = Data.' + [Name] + '})'
-FROM [stn].[UF_GetUPOutput]('Procedure')
+SELECT 'P.Add(new SqlParameter("@' + [Name] + '", SqlDbType.' + [DBType] + IIF([size] IS NULL, '', ', ' + [Size]) + ')).Value = Data.' + [Name] + ';'
+FROM [stn].[UF_GetUPInput]('Procedure')
 
 -- ##From table
 -- TODO

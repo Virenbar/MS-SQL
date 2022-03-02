@@ -35,6 +35,37 @@ BEGIN
 END
 GO
 
+IF OBJECT_ID('[stn].[UF_GetDBType]') IS NULL
+	EXEC ('CREATE FUNCTION [stn].[UF_GetDBType]()RETURNS VARCHAR(50)AS BEGIN RETURN ''''END')
+GO
+-- =============================================
+-- Author:		Artyom
+-- Create date: 05.01.2022
+-- Description:	Перевод типа из SQL в SqlDbType
+-- =============================================
+ALTER FUNCTION [stn].[UF_GetDBType](
+	@SQLType VARCHAR(50))
+RETURNS VARCHAR(50)
+AS
+BEGIN
+	RETURN CASE @SQLType
+			   WHEN 'int' THEN 'Int'
+			   WHEN 'bigint' THEN 'BigInt'
+			   WHEN 'decimal' THEN 'Decimal'
+			   WHEN 'money' THEN 'Money'
+			   WHEN 'char' THEN 'Char'
+			   WHEN 'nchar' THEN 'NChar'
+			   WHEN 'varchar' THEN 'VarChar'
+			   WHEN 'nvarchar' THEN 'NVarChar'
+			   WHEN 'date' THEN 'Date'
+			   WHEN 'smalldatetime' THEN 'SmallDateTime'
+			   WHEN 'datetime' THEN 'DateTime'
+			   WHEN 'bit' THEN 'Bit'
+		   ELSE @SQLType
+		   END
+END
+GO
+
 IF OBJECT_ID('[stn].[UF_GetTColumns]') IS NULL
 	EXEC ('CREATE FUNCTION [stn].[UF_GetTColumns]()RETURNS TABLE AS RETURN (SELECT 0 N)')
 GO
@@ -116,7 +147,7 @@ RETURN
 									   ELSE NULL
 	   END AS                                                 [Size]
 	 , [stn].[UF_GetCSType]([T].[name], [T].[IS_NULLABLE]) AS [NType]
-	 , [T].[name] AS                                          [DBType]
+	 , [stn].[UF_GetDBType]([T].[name]) AS                    [DBType]
    FROM
 	   [sys].[parameters] AS [C]
    JOIN [sys].[procedures] AS [p] ON [C].object_id = [p].object_id
