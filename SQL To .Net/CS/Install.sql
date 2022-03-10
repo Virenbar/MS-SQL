@@ -30,8 +30,9 @@ BEGIN
 			   WHEN 'smalldatetime' THEN 'DateTime'
 			   WHEN 'datetime' THEN 'DateTime'
 			   WHEN 'bit' THEN 'bool'
+			   WHEN 'uniqueidentifier' THEN 'Guid'
 		   ELSE @SQLType
-		   END + IIF(@IsNull = 'NO' OR @SQLType LIKE '%char', '', '?')
+		   END + IIF(@IsNull = 'NO' OR @IsNull = '0' OR @SQLType LIKE '%char', '', '?')
 END
 GO
 
@@ -61,6 +62,7 @@ BEGIN
 			   WHEN 'smalldatetime' THEN 'SmallDateTime'
 			   WHEN 'datetime' THEN 'DateTime'
 			   WHEN 'bit' THEN 'Bit'
+			   WHEN 'uniqueidentifier' THEN 'UniqueIdentifier'
 		   ELSE @SQLType
 		   END
 END
@@ -146,7 +148,7 @@ RETURN
 		   WHEN [T].[name] LIKE '%char' THEN CAST([C].[max_length] AS VARCHAR)
 									   ELSE NULL
 	   END AS                                                 [Size]
-	 , [stn].[UF_GetCSType]([T].[name], [T].[IS_NULLABLE]) AS [NType]
+	 , [stn].[UF_GetCSType]([T].[name], [C].[IS_NULLABLE]) AS [NType]
 	 , [stn].[UF_GetDBType]([T].[name]) AS                    [DBType]
    FROM
 	   [sys].[parameters] AS [C]
@@ -173,7 +175,7 @@ RETURN
    SELECT
 	   [C].[name] AS                                          [Name]
 	 , [C].[IS_NULLABLE] AS                                   [Null]
-	 , [stn].[UF_GetCSType]([T].[name], [T].[IS_NULLABLE]) AS [NType]
+	 , [stn].[UF_GetCSType]([T].[name], [C].[IS_NULLABLE]) AS [NType]
 	 , [T].[name] AS                                          [DBType]
    FROM
 	   [sys].[dm_exec_describe_first_result_set_for_object](OBJECT_ID(@UP), NULL) [C]

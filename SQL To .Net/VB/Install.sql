@@ -30,8 +30,41 @@ BEGIN
 			   WHEN 'smalldatetime' THEN 'Date'
 			   WHEN 'datetime' THEN 'Date'
 			   WHEN 'bit' THEN 'Boolean'
+			   WHEN 'uniqueidentifier' THEN 'Guid'
 		   ELSE @SQLType
-		   END + IIF(@IsNull = 'NO' OR @SQLType IN('varchar', 'nvarchar'), '', '?')
+		   END + IIF(@IsNull = 'NO' OR @IsNull = '0' OR @SQLType LIKE '%char', '', '?')
+END
+GO
+
+IF OBJECT_ID('[stn].[UF_GetDBType]') IS NULL
+	EXEC ('CREATE FUNCTION [stn].[UF_GetDBType]()RETURNS VARCHAR(50)AS BEGIN RETURN ''''END')
+GO
+-- =============================================
+-- Author:		Artyom
+-- Create date: 05.01.2022
+-- Description:	Перевод типа из SQL в SqlDbType
+-- =============================================
+ALTER FUNCTION [stn].[UF_GetDBType](
+	@SQLType VARCHAR(50))
+RETURNS VARCHAR(50)
+AS
+BEGIN
+	RETURN CASE @SQLType
+			   WHEN 'int' THEN 'Int'
+			   WHEN 'bigint' THEN 'BigInt'
+			   WHEN 'decimal' THEN 'Decimal'
+			   WHEN 'money' THEN 'Money'
+			   WHEN 'char' THEN 'Char'
+			   WHEN 'nchar' THEN 'NChar'
+			   WHEN 'varchar' THEN 'VarChar'
+			   WHEN 'nvarchar' THEN 'NVarChar'
+			   WHEN 'date' THEN 'Date'
+			   WHEN 'smalldatetime' THEN 'SmallDateTime'
+			   WHEN 'datetime' THEN 'DateTime'
+			   WHEN 'bit' THEN 'Bit'
+			   WHEN 'uniqueidentifier' THEN 'UniqueIdentifier'
+		   ELSE @SQLType
+		   END
 END
 GO
 
@@ -115,8 +148,8 @@ RETURN
 		   WHEN [T].[name] LIKE '%char' THEN CAST([C].[max_length] AS VARCHAR)
 									   ELSE NULL
 	   END AS                                                 [Size]
-	 , [stn].[UF_GetVBType]([T].[name], [T].[IS_NULLABLE]) AS [NType]
-	 , [T].[name] AS                                          [DBType]
+	 , [stn].[UF_GetVBType]([T].[name], [C].[IS_NULLABLE]) AS [NType]
+	 , [stn].[UF_GetDBType]([T].[name]) AS                    [DBType]
    FROM
 	   [sys].[parameters] AS [C]
    JOIN [sys].[procedures] AS [p] ON [C].object_id = [p].object_id
@@ -142,7 +175,7 @@ RETURN
    SELECT
 	   [C].[name] AS                                          [Name]
 	 , [C].[IS_NULLABLE] AS                                   [Null]
-	 , [stn].[UF_GetVBType]([T].[name], [T].[IS_NULLABLE]) AS [NType]
+	 , [stn].[UF_GetVBType]([T].[name], [C].[IS_NULLABLE]) AS [NType]
 	 , [T].[name] AS                                          [DBType]
    FROM
 	   [sys].[dm_exec_describe_first_result_set_for_object](OBJECT_ID(@UP), NULL) [C]
