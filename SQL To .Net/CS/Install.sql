@@ -85,7 +85,10 @@ RETURN
    SELECT
 	   [COLUMN_NAME] AS                                                           [Name]
 	 , [IS_NULLABLE] AS                                                           [Null]
-	 , CAST([CHARACTER_MAXIMUM_LENGTH] AS VARCHAR) AS                             [Size]
+	 , CASE [CHARACTER_MAXIMUM_LENGTH]
+		   WHEN -1 THEN 'max'
+						ELSE CAST([CHARACTER_MAXIMUM_LENGTH] AS VARCHAR)
+	   END AS                                                                     [Size]
 	 , ISNULL([DOMAIN_NAME], [stn].[UF_GetCSType]([DATA_TYPE], [IS_NULLABLE])) AS [NType]
 	 , [DOMAIN_NAME] AS                                                           [CType]
 	 , [DATA_TYPE] AS                                                             [DBType]
