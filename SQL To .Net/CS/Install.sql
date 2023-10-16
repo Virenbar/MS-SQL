@@ -8,7 +8,7 @@ IF OBJECT_ID('[stn].[UF_GetCSType]') IS NULL
 GO
 -- =============================================
 -- Author:		Artyom
--- Create date: 27.05.21
+-- Create date:	27.05.2021
 -- Description:	Перевод типа из SQL в .Net
 -- =============================================
 ALTER FUNCTION [stn].[UF_GetCSType](
@@ -41,7 +41,7 @@ IF OBJECT_ID('[stn].[UF_GetDBType]') IS NULL
 GO
 -- =============================================
 -- Author:		Artyom
--- Create date: 05.01.2022
+-- Create date:	05.01.2022
 -- Description:	Перевод типа из SQL в SqlDbType
 -- =============================================
 ALTER FUNCTION [stn].[UF_GetDBType](
@@ -73,8 +73,8 @@ IF OBJECT_ID('[stn].[UF_GetTColumns]') IS NULL
 GO
 -- =============================================
 -- Author:		Artyom
--- Create date: 25.09.20
--- Description:	 Возвращает типы столбцов таблицы
+-- Create date:	25.09.2020
+-- Description:	Возвращает типы столбцов таблицы
 -- =============================================
 ALTER FUNCTION [stn].[UF_GetTColumns](
 	@Table AS VARCHAR(50))
@@ -95,7 +95,8 @@ RETURN
    FROM
 	   [INFORMATION_SCHEMA].[COLUMNS]
    WHERE [TABLE_NAME] = @Table AND
-		 [COLUMN_NAME] NOT IN('CRdate', 'CRuser', 'EDdate', 'EDuser', 'DLDate', 'DLUser'))
+		 [COLUMN_NAME] NOT IN('CRdate', 'CRuser', 'EDdate', 'EDuser', 'DLDate', 'DLUser') AND
+		 [COLUMN_NAME] NOT LIKE '[_]%')
 GO
 
 IF OBJECT_ID('[stn].[UF_GetTTColumns]') IS NULL
@@ -134,8 +135,8 @@ IF OBJECT_ID('[stn].[UF_GetUPInput]') IS NULL
 GO
 -- =============================================
 -- Author:		Artyom
--- Create date: 21.01.2021
--- Description:	 Возвращает типы входных данных процедуры
+-- Create date:	21.01.2021
+-- Description:	Возвращает типы входных данных процедуры
 -- =============================================
 ALTER FUNCTION [stn].[UF_GetUPInput](
 	@UP AS VARCHAR(50))
@@ -166,8 +167,8 @@ IF OBJECT_ID('[stn].[UF_GetUPOutput]') IS NULL
 GO
 -- =============================================
 -- Author:		Artyom
--- Create date: 19.01.2021
--- Description:	 Возвращает типы выходных данных процедуры
+-- Create date:	19.01.2021
+-- Description:	Возвращает типы выходных данных процедуры
 -- =============================================
 ALTER FUNCTION [stn].[UF_GetUPOutput](
 	@UP AS VARCHAR(50))
